@@ -138,7 +138,6 @@ class FolderMonitor {
         // Define the block to call when a file change is detected.
         folderMonitorSource?.setEventHandler { [weak self] in
             let r = self?.ditectNewFile()
-            print(r)
             self?.folderDidChange?()
         }
 

@@ -11,8 +11,10 @@ import SwiftData
 @Model
 final class VisitedUrl {
     var url: String
+    var domain: String
 
-    init(url: String) {
+    init(url: String, domain: String) {
         self.url = url
+        self.domain = domain
     }
 }
