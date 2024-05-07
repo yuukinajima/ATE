@@ -8,6 +8,8 @@
 import SafariServices
 import os.log
 
+import SwiftData
+
 public enum Logger {
     public static let standard: os.Logger = .init(
         subsystem: Bundle.main.bundleIdentifier!,
@@ -22,6 +24,8 @@ private enum LogCategory: String {
 }
 
 class SafariExtensionHandler: SFSafariExtensionHandler {
+
+    let modelContext = ModelContext(sharedModelContainer)
 
     override func beginRequest(with context: NSExtensionContext) {
         let request = context.inputItems.first as? NSExtensionItem
@@ -76,7 +80,22 @@ class SafariExtensionHandler: SFSafariExtensionHandler {
         }
 
         Logger.standard.info("Info page \(nexturl.path())")
-        print("page event \(nexturl.path())")
+
+
+
+        let newItem = Item(timestamp: Date())
+        modelContext.insert(newItem)
+
+        let fetchDescriptor = FetchDescriptor<Item>()
+        do {
+            
+            Logger.standard.info("Info page Swiftdata")
+            let fetchedItems = try modelContext.fetch(fetchDescriptor)
+            Logger.standard.info("Info page fetchDescriptor \(fetchedItems, privacy: .public)")
+        }
+        catch {
+            Logger.standard.info("Info page fetchDescriptor error")
+        }
 
     }
 

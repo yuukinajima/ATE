@@ -55,5 +55,5 @@ struct SwiftUIView: View {
 
 #Preview {
     SwiftUIView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: Item.self, inMemory: false)
 }
