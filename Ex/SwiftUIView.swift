@@ -54,9 +54,26 @@ struct SwiftUIView: View {
 }
 
 
-struct View1: View {
+struct DebugView: View {
     var body: some View {
-        Text("View 1")
+        TabView {
+            RuleView()
+                .tabItem {
+                    Label("Rule", systemImage: "list.dash")
+                }
+
+
+            VisitUrlView()
+                .tabItem {
+                    Label("VisitUrl", systemImage: "square.and.pencil")
+                }
+
+            LogView()
+                .tabItem {
+                    Label("Log", systemImage: "square.and.pencil")
+                }
+
+        }
     }
 }
 
@@ -66,13 +83,93 @@ This section is debug message zone.
 
 """
 
+struct RuleView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query private var rules: [Rule]
+    var body: some View {
 
-struct DebugView: View {
+        VStack{
+            GroupBox(label:
+                Label("Note", systemImage: "info.bubble")
+            ) {
+                    Text("List of Rules")
+            }
+
+            HStack(){
+                Button(action: addLog) {
+                    Label("Add", systemImage: "plus")
+                }
+                Button(action: clearLog) {
+                    Label("Clear", systemImage: "clear")
+                }
+            }
+
+
+            Table(rules){
+                TableColumn("timestamp") { item in
+                    Text(item.timestamp, format: .dateTime)
+                }
+            }
+        }
+    }
+
+
+    private func addLog() {
+
+    }
+
+    private func clearLog() {
+
+    }
+}
+
+struct VisitUrlView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query private var urls: [VisitedUrl]
+    var body: some View {
+
+        VStack{
+            GroupBox(label:
+                Label("Note", systemImage: "info.bubble")
+            ) {
+                    Text("VisitUrlView")
+            }
+
+            HStack(){
+                Button(action: addLog) {
+                    Label("Add", systemImage: "plus")
+                }
+                Button(action: clearLog) {
+                    Label("Clear", systemImage: "clear")
+                }
+            }
+
+
+            Table(urls){
+                TableColumn("timestamp") { item in
+                    Text(item.timestamp, format: .dateTime)
+                }
+            }
+        }
+    }
+
+
+    private func addLog() {
+
+    }
+
+    private func clearLog() {
+
+    }
+}
+
+struct LogView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var logs: [SafariExtensionLog]
     @Query private var items: [Item]
     @Query private var urls: [VisitedUrl]
     var body: some View {
+        
         VStack{
             GroupBox(label:
                 Label("Note", systemImage: "info.bubble")
@@ -132,39 +229,6 @@ struct DebugView: View {
 }
 
 
-struct NaviView: View {
-    @Environment(\.modelContext) private var modelContext
-
-    var body: some View {
-        TabView {
-            View1()
-                .tabItem {
-                    Label("Setting", systemImage: "list.dash")
-                }
-
-
-            DebugView()
-                .tabItem {
-                    Label("Debug", systemImage: "square.and.pencil")
-                }
-        }
-    }
-
-}
-
-struct LogView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-
-    var body: some View {
-        View1()
-            .tabItem {
-                Label("Menu", systemImage: "list.dash")
-            }
-    }
-
-}
-
 #Preview {
     SwiftUIView()
         .modelContainer(for: Item.self, inMemory: true)
@@ -175,5 +239,8 @@ struct LogView: View {
     DebugView()
         .modelContainer(for: [
             SafariExtensionLog.self,
+            VisitedUrl.self,
+            SafariExtensionLog.self,
+            Rule.self
         ], inMemory: true)
 }
