@@ -97,6 +97,9 @@ class SafariExtensionHandler: SFSafariExtensionHandler {
             Logger.standard.info("Info page fetchDescriptor error")
         }
 
+        let newLog = SafariExtensionLog(message: "HERE")
+        modelContext.insert(newLog)
+
     }
 
     func handler(_ p: SFSafariPageProperties?) {

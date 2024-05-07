@@ -43,12 +43,13 @@ struct UIApp: App {
             print("folderDidChange")
         }
         folderMonitor.startMonitoring()
-
     }
+
 
     var body: some Scene {
         WindowGroup {
-            SwiftUIView()
+            //SwiftUIView()
+            DebugView()
         }
         .modelContainer(sharedModelContainer)
     }
@@ -101,7 +102,6 @@ class FolderMonitor {
 
         print("com.kumonosudou.ate.groups")
 
-        print( Bundle.main.bundleIdentifier )
 
 
     }

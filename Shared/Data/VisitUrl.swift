@@ -8,8 +8,6 @@
 import Foundation
 import SwiftData
 
-
-
 @Model
 final class VisitedUrl {
     var url: String
@@ -24,3 +22,32 @@ final class VisitedUrl {
         self.timestamp = timestamp
     }
 }
+
+@Model
+final class Rule {
+    var matcher: String
+    var timestamp: Date
+    
+    var isAutoCollection: Bool
+
+
+    init(message: String, timestamp: Date = Date.now, isAutoCollection:Bool = false) {
+        self.matcher = message
+        self.timestamp = timestamp
+        self.isAutoCollection = isAutoCollection
+    }
+}
+
+
+@Model
+final class SafariExtensionLog {
+    var message: String
+    var timestamp: Date
+
+    init(message: String, timestamp: Date = Date.now) {
+        self.message = message
+        self.timestamp = timestamp
+    }
+}
+
+
