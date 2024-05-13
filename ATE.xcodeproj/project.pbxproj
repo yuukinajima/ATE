@@ -12,6 +12,7 @@
 		B93552B12BE9AFA5002A3D18 /* SharedModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93552AE2BE9AF9C002A3D18 /* SharedModelContainer.swift */; };
 		B93552B32BE9B083002A3D18 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9EC35D52BDB9EDC00559F11 /* Item.swift */; };
 		B988F5242BE23D6F0049EE73 /* Url.swift in Sources */ = {isa = PBXBuildFile; fileRef = B988F5232BE23D6F0049EE73 /* Url.swift */; };
+		B9C2B22C2BF1E4C700EBE2DD /* FolderMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C2B22B2BF1E4C700EBE2DD /* FolderMonitor.swift */; };
 		B9EC35842BD94F8900559F11 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9EC35832BD94F8900559F11 /* AppDelegate.swift */; };
 		B9EC358A2BD94F8900559F11 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B9EC35892BD94F8900559F11 /* Icon.png */; };
 		B9EC35952BD94F8B00559F11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9EC35942BD94F8B00559F11 /* Assets.xcassets */; };
@@ -70,6 +71,7 @@
 /* Begin PBXFileReference section */
 		B93552AE2BE9AF9C002A3D18 /* SharedModelContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedModelContainer.swift; sourceTree = "<group>"; };
 		B988F5232BE23D6F0049EE73 /* Url.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Url.swift; sourceTree = "<group>"; };
+		B9C2B22B2BF1E4C700EBE2DD /* FolderMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderMonitor.swift; sourceTree = "<group>"; };
 		B9EC35802BD94F8900559F11 /* Ex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9EC35832BD94F8900559F11 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B9EC35892BD94F8900559F11 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 				B9EC35DA2BDE84ED00559F11 /* Info.plist */,
 				B9EC35D32BDA44EE00559F11 /* SwiftUIView.swift */,
 				B9EC35832BD94F8900559F11 /* AppDelegate.swift */,
+				B9C2B22B2BF1E4C700EBE2DD /* FolderMonitor.swift */,
 				B9EC35942BD94F8B00559F11 /* Assets.xcassets */,
 				B9EC35962BD94F8B00559F11 /* Ex.entitlements */,
 				B9EC35852BD94F8900559F11 /* Resources */,
@@ -397,6 +400,7 @@
 			files = (
 				B9EC35842BD94F8900559F11 /* AppDelegate.swift in Sources */,
 				B9EC35D62BDB9EDC00559F11 /* Item.swift in Sources */,
+				B9C2B22C2BF1E4C700EBE2DD /* FolderMonitor.swift in Sources */,
 				B93552AF2BE9AF9C002A3D18 /* SharedModelContainer.swift in Sources */,
 				B9EC35D42BDA44EE00559F11 /* SwiftUIView.swift in Sources */,
 				B9EC35D92BDBA38F00559F11 /* VisitUrl.swift in Sources */,

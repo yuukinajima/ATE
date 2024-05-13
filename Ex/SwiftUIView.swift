@@ -92,28 +92,25 @@ struct DebugView: View {
 
 struct SettingView: View {
     @Environment(\.modelContext) private var modelContext
-    @State private var settings: AppSettings?
-    @State private var tag: String = ""
-    @State private var location: String = ""
+    @State private var settings: AppSettings
+    @State private var loaded: Bool
 
     var body: some View {
         NavigationStack {
             VStack {
-                if let settings {
-
-
+                if loaded {
                     HStack(){
                         Text("Tag:")
                         TextField(
                             "tag",
-                            text: $tag
+                            text: $settings.tag
                         )
                     }
                     HStack(){
                         Text("Location:")
                         TextField(
                             "location",
-                            text: $location
+                            text: $settings.location
                         )
                     }
 
@@ -121,7 +118,7 @@ struct SettingView: View {
                 } else {
                     Text("Loading…")
                 }
-                Button(action: {}) {
+                Button(action: save ) {
                     Label("Save", systemImage: "archivebox")
                 }
             }
@@ -130,12 +127,33 @@ struct SettingView: View {
         }
     }
 
+
+    init (){
+        settings = AppSettings(tag: "work", location: "downloads")
+        loaded = false
+    }
+
     func load() {
+        print("load")
         let request = FetchDescriptor<AppSettings>()
         let data = try? modelContext.fetch(request)
-        settings = data?.first ?? AppSettings(tag: "work", location: "downloads")
-        tag = settings?.tag ?? "a"
-        location = settings?.location ?? "w"
+        guard let first = data?.first else{
+            settings = AppSettings(tag: "Anonymous", location: "Unknown" )
+            modelContext.insert(settings)
+            loaded = true
+            return
+        }
+
+        settings = first
+        loaded = true
+    }
+
+    private func save(){
+        print("aaa")
+        print(settings.tag)
+        print(settings.location)
+        try! modelContext.save()
+
     }
 }
 
