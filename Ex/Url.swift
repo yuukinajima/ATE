@@ -10,7 +10,7 @@ import Foundation
 
 extension URL {
 
-    func whereFrom() -> String? {
+    func whereFrom() -> URL? {
         guard let data = try? self.extendedAttribute(forName: "com.apple.metadata:kMDItemWhereFroms") else {
             return nil
         }
@@ -20,9 +20,77 @@ extension URL {
         if decodedData.count < 0 {
             return nil
         }
-        return decodedData[0]
+        return URL(string: decodedData[0])
     }
 
+    private func getResourceValue() -> (NSURL, AnyObject?) {
+        let url = NSURL(fileURLWithPath: self.path)
+        do{
+            var resource : AnyObject?
+            try url.getResourceValue(&resource, forKey: .tagNamesKey)
+            return (url, resource)
+        }catch{
+            return (url, nil)
+        }
+    }
+
+
+    func getTags() -> Set<String>?{
+        let (_, resource) = self.getResourceValue()
+        var tags : [String]
+        if resource == nil {
+            return nil
+        }
+        tags = resource as! [String]
+        return Set(tags)
+    }
+
+    func addTags(_ addTagArray: String...) -> Set<String>? {
+        let (url, resource) = self.getResourceValue()
+        var tags : [String]
+        if resource == nil {
+            return nil
+        }
+        tags = resource as! [String]
+        let currentTag = Set(tags)
+        let newTags = currentTag.union(Set(addTagArray))
+
+        do{
+            try url.setResourceValue(Array(newTags), forKey: .tagNamesKey)
+        }catch{
+            return nil
+        }
+        return newTags
+    }
+
+    func setTags(_ tagArray: String...) -> Set<String>? {
+        let (url, _) = self.getResourceValue()
+        do {
+            try url.setResourceValue(tagArray, forKey: .tagNamesKey)
+        } catch {
+            return nil
+        }
+        return nil
+    }
+
+    func removeTags(_ tagArray: String...) -> Set<String>? {
+        let (url, resource) = self.getResourceValue()
+        var tags : [String]
+        if resource == nil {
+            return nil
+        }
+        tags = resource as! [String]
+        let currentTag = Set(tags)
+        let newTags = currentTag.subtracting(Set(tagArray))
+
+        do{
+            try url.setResourceValue(Array(newTags), forKey: .tagNamesKey)
+        }catch{
+            return nil
+        }
+        return newTags
+    }
+    
     /// Get extended attribute.
     func extendedAttribute(forName name: String) throws -> Data  {
 

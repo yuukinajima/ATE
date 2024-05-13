@@ -36,13 +36,21 @@ struct UIApp: App {
         }
 
         print("downloadURL \(downloadURL)")
-        
-        folderMonitor = FolderMonitor(url: downloadURL)
 
-        folderMonitor.folderDidChange = { [] in
-            print("folderDidChange")
-        }
-        folderMonitor.startMonitoring()
+
+        let targetUrl = URL(fileURLWithPath: "qa-132.html", relativeTo: downloadURL)
+        print("target: \(targetUrl.absoluteString)")
+
+        print(targetUrl.getTags() ?? "")
+
+        let _ = targetUrl.addTags("red", "green")
+
+//        folderMonitor = FolderMonitor(url: downloadURL)
+//
+//        folderMonitor.folderDidChange = { [] in
+//            print("folderDidChange")
+//        }
+//        folderMonitor.startMonitoring()
     }
 
 
@@ -254,5 +262,25 @@ class FolderMonitor {
         }
         return Set(list)
     }
+
+    func applyRule(url: URL){
+        guard let whereFrom = url.whereFrom() else {
+            return
+        }
+        
+        let host = whereFrom.host
+        print("host: \(String(describing: host))")
+
+
+        print("RULE")
+
+        if(true){
+
+        }
+
+        print("AutoGen")
+
+    }
+
 }
 
