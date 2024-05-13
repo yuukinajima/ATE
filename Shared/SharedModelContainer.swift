@@ -13,7 +13,9 @@ var sharedModelContainer: ModelContainer = {
         Item.self,
         VisitedUrl.self,
         SafariExtensionLog.self,
-        Rule.self
+        Rule.self,
+        AutoGenerateRule.self,
+        AppSettings.self
     ])
     let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

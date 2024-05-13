@@ -57,10 +57,20 @@ struct SwiftUIView: View {
 struct DebugView: View {
     var body: some View {
         TabView {
+            SettingView()
+                .tabItem {
+                    Label("Setting", systemImage: "list.dash")
+                }
             RuleView()
                 .tabItem {
                     Label("Rule", systemImage: "list.dash")
                 }
+
+            AutoRuleView()
+                .tabItem {
+                    Label("AutoRule", systemImage: "list.dash")
+                }
+
 
 
             VisitUrlView()
@@ -78,6 +88,57 @@ struct DebugView: View {
 }
 
 
+
+
+struct SettingView: View {
+    @Environment(\.modelContext) private var modelContext
+    @State private var settings: AppSettings?
+    @State private var tag: String = ""
+    @State private var location: String = ""
+
+    var body: some View {
+        NavigationStack {
+            VStack {
+                if let settings {
+
+
+                    HStack(){
+                        Text("Tag:")
+                        TextField(
+                            "tag",
+                            text: $tag
+                        )
+                    }
+                    HStack(){
+                        Text("Location:")
+                        TextField(
+                            "location",
+                            text: $location
+                        )
+                    }
+
+
+                } else {
+                    Text("Loading…")
+                }
+                Button(action: {}) {
+                    Label("Save", systemImage: "archivebox")
+                }
+            }
+            .navigationTitle("Singletons")
+            .onAppear(perform: load)
+        }
+    }
+
+    func load() {
+        let request = FetchDescriptor<AppSettings>()
+        let data = try? modelContext.fetch(request)
+        settings = data?.first ?? AppSettings(tag: "work", location: "downloads")
+        tag = settings?.tag ?? "a"
+        location = settings?.location ?? "w"
+    }
+}
+
 let firstSectionMessage = """
 This section is debug message zone.
 
@@ -86,26 +147,60 @@ This section is debug message zone.
 struct RuleView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var rules: [Rule]
+    @State private var name: String = ""
+    @State private var matcher: String = ""
+
     var body: some View {
 
         VStack{
             GroupBox(label:
                 Label("Note", systemImage: "info.bubble")
             ) {
-                    Text("List of Rules")
+                TextField(
+                    "name",
+                    text: $name
+                )
+                TextField(
+                    "matcher",
+                    text: $matcher
+                )
+                
             }
 
             HStack(){
-                Button(action: addLog) {
+                Button(action: add) {
                     Label("Add", systemImage: "plus")
                 }
-                Button(action: clearLog) {
-                    Label("Clear", systemImage: "clear")
+                Button(action: clear) {
+                    Label("Clear", systemImage: "trash")
                 }
             }
 
-
             Table(rules){
+                TableColumn("id") { item in
+                    Text(item.id.uuidString) 
+                        .contextMenu {
+                            Button(
+                                action: {}
+                            ) {
+                                Text("Edit todo")
+                            }
+
+                            Divider()
+                            
+                            Button(action: {
+                                modelContext.delete(item)
+                            }) {
+                                Text("Delete")
+                            }
+                      }
+                }
+                TableColumn("name") { item in
+                    Text(item.name)
+                }
+                TableColumn("matcher") { item in
+                    Text(item.matcher)
+                }
                 TableColumn("timestamp") { item in
                     Text(item.timestamp, format: .dateTime)
                 }
@@ -113,13 +208,85 @@ struct RuleView: View {
         }
     }
 
+    private func add() {
+        withAnimation {
+            let newItem = Rule(name: $name.wrappedValue, matcher: $matcher.wrappedValue)
+            modelContext.insert(newItem)
+        }
+    }
 
-    private func addLog() {
+    private func clear() {
+        withAnimation {
+            do {
+                try modelContext.delete(model: Rule.self)
+            }
+            catch{
+            }
+        }
+    }
+
+}
+
+struct AutoRuleView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query private var rules: [AutoGenerateRule]
+    var body: some View {
+
+        VStack{
+            GroupBox(label:
+                Label("Note", systemImage: "info.bubble")
+            ) {
+                    Text("List of AutoRules")
+            }
+
+            HStack(){
+                Button(action: add) {
+                    Label("Add", systemImage: "plus")
+                }
+                Button(action: clear) {
+                    Label("Clear", systemImage: "trash")
+                }
+            }
+
+
+            Table(rules){
+                TableColumn("matcher") { item in
+                    Text(item.matcher)
+                        .contextMenu {
+                            Button(action: {
+                                modelContext.delete(item)
+                            }) {
+                                Text("Delete")
+                            }
+                        }
+                }
+                TableColumn("timestamp") { item in
+                    Text(item.timestamp, format: .dateTime)
+                }
+                TableColumn("expiredAt") { item in
+                    if let expiredAt = item.expiredAt {
+                        Text(expiredAt, format: .dateTime)
+                    } else {
+                        Text("nil")
+                    }
+
+                }
+            }
+        }
+    }
+
+    private func add() {
 
     }
 
-    private func clearLog() {
-
+    private func clear() {
+        withAnimation {
+            do {
+                try modelContext.delete(model: AutoGenerateRule.self)
+            }
+            catch{
+            }
+        }
     }
 }
 
@@ -136,11 +303,11 @@ struct VisitUrlView: View {
             }
 
             HStack(){
-                Button(action: addLog) {
+                Button(action: add) {
                     Label("Add", systemImage: "plus")
                 }
-                Button(action: clearLog) {
-                    Label("Clear", systemImage: "clear")
+                Button(action: clear) {
+                    Label("Clear", systemImage: "trash")
                 }
             }
 
@@ -154,12 +321,18 @@ struct VisitUrlView: View {
     }
 
 
-    private func addLog() {
+    private func add() {
 
     }
 
-    private func clearLog() {
-
+    private func clear() {
+        withAnimation {
+            do {
+                try modelContext.delete(model: VisitedUrl.self)
+            }
+            catch{
+            }
+        }
     }
 }
 
@@ -184,7 +357,7 @@ struct LogView: View {
                     Label("Add Log", systemImage: "plus")
                 }
                 Button(action: clearLog) {
-                    Label("Clear Log", systemImage: "clear")
+                    Label("Clear Log", systemImage: "trash")
                 }
             }
 
@@ -222,7 +395,6 @@ struct LogView: View {
                 try modelContext.delete(model: SafariExtensionLog.self)
             }
             catch{
-
             }
         }
     }
@@ -241,6 +413,8 @@ struct LogView: View {
             SafariExtensionLog.self,
             VisitedUrl.self,
             SafariExtensionLog.self,
-            Rule.self
+            Rule.self,
+            AutoGenerateRule.self,
+            AppSettings.self
         ], inMemory: true)
 }
